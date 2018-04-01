@@ -11,6 +11,8 @@ import java.util.concurrent.TimeUnit;
 public class ApplicationManager {
   ChromeDriver wd;
 
+  private GroupHelper groupHelper;
+
   public static boolean isAlertPresent(FirefoxDriver wd) {
     try {
       wd.switchTo().alert();
@@ -21,10 +23,11 @@ public class ApplicationManager {
   }
 
   public void init() {
-    wd = new ChromeDriver();
-    wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
-    wd.get("http://localhost/addressbook/");
-    login("admin", "secret");
+   wd = new ChromeDriver();
+   wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+   wd.get("http://localhost/addressbook/");
+   groupHelper = new GroupHelper(wd);
+   login("admin", "secret");
   }
 
   public void login(String name, String pass) {
@@ -35,14 +38,6 @@ public class ApplicationManager {
     wd.findElement(By.name("user")).clear();
     wd.findElement(By.name("user")).sendKeys(name);
     wd.findElement(By.xpath("//form[@id='LoginForm']/input[3]")).click();
-  }
-
-  public void returnToGroupPage() {
-    wd.findElement(By.linkText("group page")).click();
-  }
-
-  public void submitGroupPage() {
-    wd.findElement(By.name("submit")).click();
   }
 
   public void initCreation(GroupData groupData) {
@@ -59,20 +54,14 @@ public class ApplicationManager {
   }
 
   public void gotoGroupPage() {
-    wd.findElement(By.linkText("GROUPS")).click();
+    ApplicationManager.this.wd.findElement(By.linkText("GROUPS")).click();
   }
 
   public void stop() {
-    wd.quit();
+    ApplicationManager.this.wd.quit();
   }
 
-  public void deleteSelectedGroup() {
-      wd.findElement(By.name("delete")).click();
-  }
-
-  public void selectGroup() {
-      if (!wd.findElement(By.name("selected[]")).isSelected()) {
-          wd.findElement(By.name("selected[]")).click();
-      }
+  public GroupHelper getGroupHelper() {
+    return groupHelper;
   }
 }
