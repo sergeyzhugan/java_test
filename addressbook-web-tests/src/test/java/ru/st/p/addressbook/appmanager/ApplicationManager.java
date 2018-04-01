@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 public class ApplicationManager {
   ChromeDriver wd;
 
+  private NavigationHelper navigationHelper;
   private GroupHelper groupHelper;
 
   public static boolean isAlertPresent(FirefoxDriver wd) {
@@ -27,6 +28,7 @@ public class ApplicationManager {
    wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
    wd.get("http://localhost/addressbook/");
    groupHelper = new GroupHelper(wd);
+   navigationHelper = new NavigationHelper(wd);
    login("admin", "secret");
   }
 
@@ -53,15 +55,15 @@ public class ApplicationManager {
     wd.findElement(By.name("group_footer")).sendKeys(groupData.getFooter());
   }
 
-  public void gotoGroupPage() {
-    ApplicationManager.this.wd.findElement(By.linkText("GROUPS")).click();
-  }
-
   public void stop() {
-    ApplicationManager.this.wd.quit();
+    wd.quit();
   }
 
   public GroupHelper getGroupHelper() {
     return groupHelper;
+  }
+
+  public NavigationHelper getNavigationHelper() {
+    return navigationHelper;
   }
 }
