@@ -15,15 +15,6 @@ public class ApplicationManager {
   private GroupHelper groupHelper;
   private SessionHelper sessionHelper;
 
-  public static boolean isAlertPresent(FirefoxDriver wd) {
-    try {
-      wd.switchTo().alert();
-      return true;
-    } catch (NoAlertPresentException e) {
-      return false;
-    }
-  }
-
   public void init() {
    wd = new ChromeDriver();
    wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
